@@ -94,12 +94,13 @@ public:
 		keyboardDevice = isKeyboardDevice;
 	}
 
-	void setPlayer(CHAR playerIndex) {
+    //i think the core uses ints not chars
+	void setPlayer(int playerIndex) {
 		player = playerIndex;
 	}
 
 private:
-	CHAR player;
+	int player;
 	BOOL keyboardDevice;
 };
 
@@ -166,7 +167,7 @@ static uint8_t _keyboardShiftCount = 0;
 		_stateData = [NSMutableData dataWithLength:sizeof(IntellivisionState)];
 
         dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class( DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, 0);
-        audioQueue = dispatch_queue_create("com.provenance.jaguar.audio", priorityAttribute);
+        audioQueue = dispatch_queue_create("com.provenance.intellivision.audio", priorityAttribute);
     }
 
     return self;
@@ -419,7 +420,7 @@ static uint8_t _keyboardShiftCount = 0;
 				InputProducer** producerList = new InputProducer*[0];
 				BlissInputProducer *producer = new BlissInputProducer;
 
-				producer->setPlayer(i);
+                producer->setPlayer(i);
 				producer->setKeyboardDevice(isKeyboard);
 				producerList[0] = producer;
 				nextObject->addBinding(producerList, objectids, 1);
@@ -583,7 +584,8 @@ static uint8_t _keyboardShiftCount = 0;
 
 - (const void *)getVideoBufferWithHint:(void *)hint {
     if (!hint) {
-        if (!_videoBuffer) _videoBuffer = new unsigned char[256 * 256 * 4];
+        if (!_videoBuffer)
+            _videoBuffer = new unsigned char[256 * 256 * 4];
         hint = _videoBuffer;
     }
 
@@ -594,9 +596,10 @@ static uint8_t _keyboardShiftCount = 0;
     return [self getVideoBufferWithHint:nil];
 }
 
-- (GLenum)pixelFormat { return GL_BGRA; }
+//OpenGL doesn't support BGRA
+- (GLenum)pixelFormat { return GL_RGBA; }
 
-- (GLenum)internalPixelFormat { return GL_BGRA; }
+- (GLenum)internalPixelFormat { return GL_RGBA; }
 
 - (GLenum)pixelType { return GL_UNSIGNED_BYTE; }
 
@@ -789,7 +792,7 @@ BlissInputProducer::BlissInputProducer()
 
 float BlissInputProducer::getValue(INT32 enumeration) {
 	BOOL isKeyboardDevice = this->isKeyboardDevice();
-	char player = this->player;
+	int player = this->player;
 	float value = 0.0f;
 
 	if(isKeyboardDevice) {
@@ -804,11 +807,33 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 		} else if(enumeration >= CONTROLLER_KEYPAD_THREE && enumeration <= CONTROLLER_KEYPAD_CLEAR) {
 			value = INTY_TEST(_controller[player].keypad, enumeration) == enumeration ? 1.0f : 0.0f;
 		}
+        
+        //This is useful when debugging to see that input is correctly being passed back to the core
+        printf("*** enumeration %d, value %f, player %d\n", enumeration, value, player);
 	}
 	return value;
 }
 
 #pragma mark - PVIntellivisionSystemResponderClient
+
+- (void)updateControllers
+{
+    if ([self.controller1 extendedGamepad])
+    {
+        //TODO: fully implement support for controllers (might be tough, Intellivision controller doesn't map to moderns)
+        GCExtendedGamepad *gamepad = [self.controller1 extendedGamepad];
+        GCControllerDirectionPad *dpad = [gamepad dpad];
+        
+//        [self setIntellivisionButton:CONTROLLER_DISC_UP isDown:(dpad.up.isPressed || gamepad.leftThumbstick.up.isPressed) forPlayer:1];
+//        [self setIntellivisionButton:CONTROLLER_DISC_DOWN isDown:(dpad.down.isPressed || gamepad.leftThumbstick.down.isPressed) forPlayer:1];
+//        [self setIntellivisionButton:CONTROLLER_DISC_LEFT isDown:(dpad.left.isPressed || gamepad.leftThumbstick.left.isPressed) forPlayer:1];
+//        [self setIntellivisionButton:CONTROLLER_DISC_RIGHT isDown:(dpad.right.isPressed || gamepad.leftThumbstick.right.isPressed) forPlayer:1];
+//        
+//        [self setIntellivisionButton:CONTROLLER_ACTION_TOP isDown:(gamepad.buttonA.isPressed) forPlayer:1];
+//        [self setIntellivisionButton:CONTROLLER_ACTION_BOTTOM_LEFT isDown:(gamepad.buttonB.isPressed) forPlayer:1];
+//        [self setIntellivisionButton:CONTROLLER_ACTION_BOTTOM_RIGHT isDown:(gamepad.buttonX.isPressed) forPlayer:1];
+    }
+}
 
 - (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player; {
     int btn = -1;
@@ -843,7 +868,8 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 }
 
 - (oneway void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player {
-    if (player = 0) { player = 1; }
+    //this is new, so we should re-look at this, but there was a bug here.
+    if (player == 0) { player = 1; }
 	switch(btn)
 	{
 		case CONTROLLER_DISC_DOWN:

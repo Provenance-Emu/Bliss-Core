@@ -30,6 +30,7 @@
 
 @protocol ObjCBridgedCoreBridge;
 @protocol PVIntellivisionSystemResponderClient;
+@protocol KeyboardResponder;
 typedef enum PVIntellivisionButton: NSInteger PVIntellivisionButton;
 
 #pragma clang diagnostic push
@@ -43,5 +44,14 @@ __attribute__((visibility("default")))
 - (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
 - (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
 
+@end
+
+//This may be needed, but not tested or integrated yet.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything" // Silence "Cannot find protocol definition" warning due to forward declaration.
+@interface PVBlissGameCoreBridge (Controls) <PVIntellivisionSystemResponderClient, KeyboardResponder>
+#pragma clang diagnostic pop
+- (void)keyDown:(unsigned short)keyCode;
+- (void)keyUp:(unsigned short)keyCode;
 @end
 

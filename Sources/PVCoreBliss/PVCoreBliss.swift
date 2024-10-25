@@ -41,12 +41,31 @@ public final class PVCoreBliss: PVEmulatorCore, @unchecked Sendable {
 
     // MARK: Lifecycle
     
+    //TODO: Fix metal, but for now force openGL
+    override public var alwaysUseMetal: Bool { false }
+    override public var alwaysUseGL: Bool { true }
+    
     lazy var _bridge: PVBlissGameCoreBridge = .init()
     
     public required init() {
         super.init()
         self.bridge = (_bridge as! any ObjCBridgedCoreBridge)
         _bridge.knownCartsPath = knownCarts
+    }
+}
+
+//This may be needed, but not tested or integrated yet.
+extension PVCoreBliss: KeyboardResponder {
+    public var gameSupportsKeyboard: Bool { true }
+    
+    public var requiresKeyboard: Bool { false }
+    
+    public func keyDown(_ key: GCKeyCode) {
+        _bridge.keyDown(UInt16(key.rawValue))
+    }
+    
+    public func keyUp(_ key: GCKeyCode) {
+        _bridge.keyUp(UInt16(key.rawValue))
     }
 }
 

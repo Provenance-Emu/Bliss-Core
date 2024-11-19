@@ -13,8 +13,8 @@ let __LIBRETRO__ = "0"
 let package = Package(
     name: "PVCoreBliss",
     platforms: [
-        .iOS(.v16),
-        .tvOS(.v16),
+        .iOS(.v15),
+        .tvOS(.v15),
         .watchOS(.v9),
         .macOS(.v11),
         .macCatalyst(.v17),

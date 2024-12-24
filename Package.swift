@@ -14,7 +14,7 @@ let package = Package(
     name: "PVCoreBliss",
     platforms: [
         .iOS(.v16),
-        .tvOS(.v15),
+        .tvOS(.v16),
         .watchOS(.v9),
         .macOS(.v11),
         .macCatalyst(.v17),

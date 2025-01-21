@@ -42,8 +42,8 @@ public final class PVCoreBliss: PVEmulatorCore, @unchecked Sendable {
     // MARK: Lifecycle
     
     //TODO: Fix metal, but for now force openGL
-    override public var alwaysUseMetal: Bool { false }
-    override public var alwaysUseGL: Bool { true }
+//    override public var alwaysUseMetal: Bool { false }
+//    override public var alwaysUseGL: Bool { true }
     
     lazy var _bridge: PVBlissGameCoreBridge = .init()
     

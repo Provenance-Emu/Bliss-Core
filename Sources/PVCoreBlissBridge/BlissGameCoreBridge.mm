@@ -809,7 +809,7 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 		}
         
         //This is useful when debugging to see that input is correctly being passed back to the core
-        printf("*** enumeration %d, value %f, player %d\n", enumeration, value, player);
+        // printf("*** enumeration %d, value %f, player %d\n", enumeration, value, player);
 	}
 	return value;
 }

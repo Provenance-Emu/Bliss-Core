@@ -26,6 +26,8 @@
 
 #import "BlissGameCoreBridge.h"
 
+#include <string.h>
+
 @import PVEmulatorCore;
 @import PVCoreBridge;
 @import PVCoreObjCBridge;
@@ -780,7 +782,7 @@ void BlissVideoBus::render() {
 	VideoBus::render();
 
 	[current->_bufferLock lock];
-	memcpy([current videoBuffer], this->pixelBuffer, this->pixelBufferSize);
+	memcpy(const_cast<void *>([current videoBuffer]), static_cast<const void *>(this->pixelBuffer), static_cast<size_t>(this->pixelBufferSize));
 	[current->_bufferLock unlock];
 }
 

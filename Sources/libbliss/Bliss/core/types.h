@@ -25,7 +25,16 @@ typedef unsigned long long int	UINT64;	// C99 C++11
 
 typedef char					CHAR;
 
-#if !defined(BOOL)
+// In Objective-C / Objective-C++ TUs Apple's <objc/objc.h> already
+// declares `typedef bool BOOL;` (arm64 / 64-bit Apple) or
+// `typedef signed char BOOL;` (other Apple). The `#if !defined(BOOL)`
+// guard below doesn't help because BOOL is a typedef, not a macro,
+// and a second typedef of `BOOL` to `_Bool` (vs Apple's `bool`)
+// triggers "reference to 'BOOL' is ambiguous" in C++ where `bool`
+// and `_Bool` are distinct types. Skip our typedef whenever ObjC is
+// in scope and let Apple's definition win — pure C++ / C TUs still
+// get our typedef as before.
+#if !defined(BOOL) && !defined(__OBJC__)
 #if defined(__MACH__)
 #if defined(__arm64__)
 #include <stdbool.h>

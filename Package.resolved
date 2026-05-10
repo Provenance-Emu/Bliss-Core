@@ -1,33 +1,34 @@
 {
-  "originHash" : "4c394fec6699fcf6c64c1b5ddbb673e3b60386fdc1d0d3b0ec10f53d5bbc215a",
-  "pins" : [
+  "originHash": "4c394fec6699fcf6c64c1b5ddbb673e3b60386fdc1d0d3b0ec10f53d5bbc215a",
+  "pins": [
     {
-      "identity" : "checksum",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JoeMatt/Checksum.git",
-      "state" : {
-        "revision" : "11bf55d6ec0e4dbfff2bcd99b6b12c5ce5d57b91",
-        "version" : "1.1.1"
+      "identity": "checksum",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/JoeMatt/Checksum.git",
+      "state": {
+        "revision": "11bf55d6ec0e4dbfff2bcd99b6b12c5ce5d57b91",
+        "version": "1.1.1"
       }
     },
     {
-      "identity" : "defaults",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Defaults.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
+      "identity": "defaults",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/sindresorhus/Defaults.git",
+      "state": {
+        "branch": null,
+        "revision": "5bfac4928f000fabdbef7e4ed0251399bb0841c9",
+        "version": "9.0.8"
       }
     },
     {
-      "identity" : "swiftgenplugin",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Provenance-Emu/SwiftGenPlugin.git",
-      "state" : {
-        "branch" : "develop",
-        "revision" : "2d5a0b636fb74ade5f6b54b2c773f1ea23ade65f"
+      "identity": "swiftgenplugin",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/Provenance-Emu/SwiftGenPlugin.git",
+      "state": {
+        "branch": "develop",
+        "revision": "084f83c3b285560adc94b121b74c228e16a126f9"
       }
     }
   ],
-  "version" : 3
+  "version": 3
 }

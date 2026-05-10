@@ -25,20 +25,24 @@ typedef unsigned long long int	UINT64;	// C99 C++11
 
 typedef char					CHAR;
 
-// In Objective-C / Objective-C++ TUs Apple's <objc/objc.h> already
-// declares `typedef bool BOOL;` (arm64 / 64-bit Apple) or
-// `typedef signed char BOOL;` (other Apple). The `#if !defined(BOOL)`
-// guard below doesn't help because BOOL is a typedef, not a macro,
-// and a second typedef of `BOOL` to `_Bool` (vs Apple's `bool`)
-// triggers "reference to 'BOOL' is ambiguous" in C++ where `bool`
-// and `_Bool` are distinct types. Skip our typedef whenever ObjC is
-// in scope and let Apple's definition win — pure C++ / C TUs still
-// get our typedef as before.
-#if !defined(BOOL) && !defined(__OBJC__)
+// Match Apple's <objc/objc.h> typedef exactly on Apple platforms.
+// Apple's header declares `typedef bool BOOL` on arm64 / 64-bit
+// Apple, `typedef signed char BOOL` otherwise. The previous code
+// used `_Bool` on arm64 — strictly identical to `bool` in C, but
+// Objective-C++ treats `bool` and `_Bool` as distinct typedef
+// targets, which produced "reference to 'BOOL' is ambiguous" in
+// BlissGameCoreBridge.mm when both Apple's and our typedefs were
+// in scope. Using `bool` here makes both typedefs equivalent, so
+// the duplicate declaration is silently accepted in C++/ObjC++.
+#if !defined(BOOL)
 #if defined(__MACH__)
-#if defined(__arm64__)
+#if defined(__arm64__) || defined(__LP64__)
+#if defined(__cplusplus)
+typedef bool                    BOOL;
+#else
 #include <stdbool.h>
-typedef _Bool                   BOOL;
+typedef bool                    BOOL;
+#endif
 #else
 typedef signed char				BOOL;
 #endif

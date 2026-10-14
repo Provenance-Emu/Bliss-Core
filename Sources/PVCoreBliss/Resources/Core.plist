@@ -19,7 +19,7 @@
 	<key>PVLicenseName</key>
 	<string>GPL-2.0-or-later</string>
 	<key>PVLicenseURL</key>
-	<string>https://github.com/OpenEmu/Bliss-Core/blob/HEAD/COPYING</string>
+	<string>https://github.com/OpenEmu/Bliss-Core/blob/master/Bliss/LICENSE.txt</string>
 	<key>PVCopyright</key>
 	<string>Copyright © 2003-2016 OpenEmu Team, Kyle Davis</string>
 </dict>
